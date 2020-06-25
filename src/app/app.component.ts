@@ -5,7 +5,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { FormBuilder, FormArray, Validators } from "@angular/forms";
-import { BrowserQRCodeReader } from "@zxing/library";
+import { BrowserQRCodeReader, BrowserQRCodeSvgWriter } from "@zxing/library";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -23,9 +23,22 @@ export class AppComponent {
         let imageUrl: any = reader.result;
          codeReader
           .decodeFromImage(undefined, imageUrl)
-          .then((result: any) => console.info(result))
+          .then((result: any) => {console.info(result), this.generateQr()})
           .catch(result => console.info(result));
       };
     }
+  }
+  ngOnInit(){
+    this.generateQr()
+  }
+  bb: any;
+
+  generateQr(){
+    let codeReader = new BrowserQRCodeReader();
+    let codeWriter =  new BrowserQRCodeSvgWriter();
+    const element = document.getElementById('imgs');
+    codeWriter.writeToDom(element, 'nome: Paulo, Sobrenome: Lobo', 300, 300);
+    const svgElement =  codeWriter.write('nome: Paulo, Sobrenome: Lobo', 300, 300);
+    console.log()
   }
 }
